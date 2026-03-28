@@ -1,0 +1,21 @@
+{
+  "name": "playwright-typescript-framework",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Configurable UI and API autotest framework on Playwright + TypeScript.",
+  "scripts": {
+    "test:ui": "\"$npm_node_execpath\" ./node_modules/tsx/dist/cli.mjs src/core/runner.ts --type=ui",
+    "test:api": "\"$npm_node_execpath\" ./node_modules/tsx/dist/cli.mjs src/core/runner.ts --type=api",
+    "test:all": "\"$npm_node_execpath\" ./node_modules/tsx/dist/cli.mjs src/core/runner.ts --type=all",
+    "test:tags": "\"$npm_node_execpath\" ./node_modules/tsx/dist/cli.mjs src/core/runner.ts --type=all",
+    "test:tags:workers": "\"$npm_node_execpath\" ./node_modules/tsx/dist/cli.mjs src/core/runner.ts --tags=\"@ui and @smoke\" --workers=4 --brand=demoqa --type=all",
+    "test:list": "\"$npm_node_execpath\" ./node_modules/@playwright/test/cli.js test --list",
+    "typecheck": "\"$npm_node_execpath\" ./node_modules/typescript/bin/tsc --noEmit"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.53.0",
+    "@types/node": "^24.0.0",
+    "tsx": "^4.20.0",
+    "typescript": "^5.8.3"
+  }
+}
