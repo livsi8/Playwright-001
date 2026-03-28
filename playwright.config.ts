@@ -13,7 +13,10 @@ export default defineConfig({
   },
   reporter: [
     ['list'],
-    ['html', { open: 'never' }]
+    ['html', {
+      outputFolder: 'target',
+      open: 'never'
+    }]
   ],
   outputDir: 'test-results',
   use: {
@@ -30,11 +33,13 @@ export default defineConfig({
   projects: [
     {
       name: 'ui',
-      testDir: './tests/ui'
+      testDir: './tests/ui',
+      testMatch: /.*\.ts$/
     },
     {
       name: 'api',
       testDir: './tests/api',
+      testMatch: /.*\.ts$/,
       use: {
         baseURL: brandConfig.baseApiUrl
       }
