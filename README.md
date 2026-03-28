@@ -95,6 +95,12 @@ npm run test:tags -- --brand=demoqa --workers=2 --tags="@regression and not @wip
 npm run test:ui -- --brand=demoqa --workers=4 --tags="@alertsWindows and @ui"
 ```
 
+Новый homepage сценарий в private/incognito context:
+
+```bash
+npm run test:ui -- --brand=demoqa --workers=1 --tags="@homepage and @incognito"
+```
+
 ## Как работают параметры
 
 - `--brand`: выбирает brand config через `src/config/brand-registry.ts`.
@@ -198,7 +204,12 @@ accounts: [
 
 ## Allure Report
 
-После запуска тестов результаты сохраняются в `allure-results`.
+Все отчёты и артефакты складываются только в `target`:
+
+- Playwright HTML report: `target/playwright-report`
+- Allure results: `target/allure-results`
+- Allure HTML report: `target/allure-report`
+- Test artifacts / traces / screenshots / videos: `target/test-results`
 
 Очистить старые результаты:
 
@@ -225,6 +236,49 @@ npm run test:ui -- --brand=demoqa --workers=4 --tags="@alertsWindows and @ui"
 npm run allure:generate
 npm run allure:open
 ```
+
+Incognito запуск по тегу:
+
+```bash
+npm run test:ui -- --brand=demoqa --workers=1 --tags="@incognito"
+```
+
+## Browser Selection By Tag
+
+Браузер по умолчанию:
+
+- Chromium / Chrome
+
+Поддерживаемые browser-specific теги:
+
+- `@firefox` -> Firefox
+- `@webkit` -> WebKit
+- `@safari` -> WebKit / Safari-like engine
+
+Тег режима:
+
+- `@incognito` -> private / incognito mode
+
+Комбинации тегов работают независимо, потому что каждый тег отвечает только за свою зону:
+
+- без специальных тегов -> Chromium + standard mode
+- `@firefox` -> Firefox + standard mode
+- `@incognito` -> Chromium + incognito mode
+- `@firefox` + `@incognito` -> Firefox + incognito mode
+
+Выбор браузера и режима выполняется централизованно:
+
+- `src/shared/tag-utils/runtime-profile.ts` парсит теги и строит execution profile
+- `src/core/fixtures/test-fixtures.ts` применяет этот profile на уровне конкретного теста
+- `src/ui/helpers/browser-session-launch.ts` создаёт нужный browser/session без глобальных переключателей
+
+`@incognito` обрабатывается в custom fixture и комбинируется с browser-specific тегами. Для таких тестов framework явно определяет private/incognito mode и создаёт отдельную browser session без shared state.
+
+Дополнительно framework теперь использует browser-specific private launch strategy:
+
+- Chromium: `--incognito`
+- Firefox: `-private-window`
+- WebKit: isolated non-persistent context как private-mode equivalent, потому что Playwright WebKit не запускает Safari app shell с отдельным `private-window` флагом
 
 Проверить Java:
 

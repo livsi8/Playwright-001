@@ -11,9 +11,9 @@
     "test:tags:workers": "\"$npm_node_execpath\" ./node_modules/tsx/dist/cli.mjs src/core/runner.ts --tags=\"@ui and @smoke\" --workers=4 --brand=demoqa --type=all",
     "test:list": "\"$npm_node_execpath\" ./node_modules/@playwright/test/cli.js test --list",
     "typecheck": "\"$npm_node_execpath\" ./node_modules/typescript/bin/tsc --noEmit",
-    "allure:clean": "\"$npm_node_execpath\" -e \"const fs=require('fs'); fs.rmSync('allure-results',{recursive:true,force:true}); fs.rmSync('allure-report',{recursive:true,force:true});\"",
-    "allure:generate": "\"$npm_node_execpath\" -e \"const run=require('./node_modules/allure-commandline'); run(['generate','allure-results','--clean','-o','allure-report']).on('exit', code => process.exit(code ?? 0));\"",
-    "allure:open": "\"$npm_node_execpath\" -e \"const run=require('./node_modules/allure-commandline'); run(['open','allure-report']).on('exit', code => process.exit(code ?? 0));\""
+    "allure:clean": "\"$npm_node_execpath\" -e \"const fs=require('fs'); fs.rmSync('target/playwright-report',{recursive:true,force:true}); fs.rmSync('target/allure-results',{recursive:true,force:true}); fs.rmSync('target/allure-report',{recursive:true,force:true}); fs.rmSync('target/test-results',{recursive:true,force:true});\"",
+    "allure:generate": "\"$npm_node_execpath\" -e \"const run=require('./node_modules/allure-commandline'); run(['generate','target/allure-results','--clean','-o','target/allure-report']).on('exit', code => process.exit(code ?? 0));\"",
+    "allure:open": "\"$npm_node_execpath\" -e \"const run=require('./node_modules/allure-commandline'); run(['open','target/allure-report']).on('exit', code => process.exit(code ?? 0));\""
   },
   "devDependencies": {
     "@playwright/test": "^1.53.0",

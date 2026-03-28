@@ -11,8 +11,20 @@ export class CategoryCardComponent {
     return this.root.locator('h5');
   }
 
+  public locator(): Locator {
+    return this.root;
+  }
+
+  public async text(): Promise<string> {
+    return (await this.title().innerText()).trim();
+  }
+
+  public async isEnabled(): Promise<boolean> {
+    return this.root.isEnabled();
+  }
+
   public async open(): Promise<void> {
-    const cardTitle = await this.title().innerText();
+    const cardTitle = await this.text();
     this.logger.step(`Open category card "${cardTitle}"`);
     await this.root.click();
   }

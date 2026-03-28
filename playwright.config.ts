@@ -14,16 +14,16 @@ export default defineConfig({
   reporter: [
     ['list'],
     ['html', {
-      outputFolder: 'target',
+      outputFolder: 'target/playwright-report',
       open: 'never'
     }],
     ['allure-playwright', {
-      outputFolder: 'allure-results',
+      resultsDir: 'target/allure-results',
       detail: true,
       suiteTitle: false
     }]
   ],
-  outputDir: 'test-results',
+  outputDir: 'target/test-results',
   use: {
     baseURL: brandConfig.baseUiUrl,
     headless: brandConfig.browser.headless,
