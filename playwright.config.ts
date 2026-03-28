@@ -16,6 +16,11 @@ export default defineConfig({
     ['html', {
       outputFolder: 'target',
       open: 'never'
+    }],
+    ['allure-playwright', {
+      outputFolder: 'allure-results',
+      detail: true,
+      suiteTitle: false
     }]
   ],
   outputDir: 'test-results',

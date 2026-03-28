@@ -13,8 +13,12 @@ import { HomePage } from '../../ui/pages/home.page';
 import { ModalDialogsPage } from '../../ui/pages/modal-dialogs.page';
 import { PracticeFormPage } from '../../ui/pages/practice-form.page';
 import { SectionPage } from '../../ui/pages/section.page';
-import { AlertsWindowsSteps } from '../../ui/steps/alerts-windows.steps';
+import { AlertsSteps } from '../../ui/steps/alerts.steps';
+import { BrowserWindowsSteps } from '../../ui/steps/browser-windows.steps';
+import { CssVerificationSteps } from '../../ui/steps/css-verification.steps';
+import { FramesSteps } from '../../ui/steps/frames.steps';
 import { HomeSteps } from '../../ui/steps/home.steps';
+import { ModalDialogsSteps } from '../../ui/steps/modal-dialogs.steps';
 
 interface WorkerFixtures {
   brandConfig: BrandConfig;
@@ -31,11 +35,15 @@ interface TestFixtures {
   alertsPage: AlertsPage;
   framesPage: FramesPage;
   modalDialogsPage: ModalDialogsPage;
+  cssVerificationSteps: CssVerificationSteps;
+  browserWindowsSteps: BrowserWindowsSteps;
+  alertsSteps: AlertsSteps;
+  framesSteps: FramesSteps;
+  modalDialogsSteps: ModalDialogsSteps;
   homePage: HomePage;
   sectionPage: SectionPage;
   practiceFormPage: PracticeFormPage;
   homeSteps: HomeSteps;
-  alertsWindowsSteps: AlertsWindowsSteps;
 }
 
 export const test = base.extend<TestFixtures, WorkerFixtures>({
@@ -89,6 +97,21 @@ export const test = base.extend<TestFixtures, WorkerFixtures>({
   modalDialogsPage: async ({ page, logger }, use) => {
     await use(new ModalDialogsPage(page, logger));
   },
+  cssVerificationSteps: async ({ logger }, use) => {
+    await use(new CssVerificationSteps(logger));
+  },
+  browserWindowsSteps: async ({ browserWindowsPage, cssVerificationSteps, logger }, use) => {
+    await use(new BrowserWindowsSteps(browserWindowsPage, cssVerificationSteps, logger));
+  },
+  alertsSteps: async ({ alertsPage, cssVerificationSteps, logger }, use) => {
+    await use(new AlertsSteps(alertsPage, cssVerificationSteps, logger));
+  },
+  framesSteps: async ({ framesPage, logger }, use) => {
+    await use(new FramesSteps(framesPage, logger));
+  },
+  modalDialogsSteps: async ({ modalDialogsPage, cssVerificationSteps, logger }, use) => {
+    await use(new ModalDialogsSteps(modalDialogsPage, cssVerificationSteps, logger));
+  },
   homePage: async ({ page, logger }, use) => {
     await use(new HomePage(page, logger));
   },
@@ -100,9 +123,6 @@ export const test = base.extend<TestFixtures, WorkerFixtures>({
   },
   homeSteps: async ({ page, homePage, sectionPage, practiceFormPage, logger }, use) => {
     await use(new HomeSteps(page, homePage, sectionPage, practiceFormPage, logger));
-  },
-  alertsWindowsSteps: async ({ browserWindowsPage, alertsPage, framesPage, modalDialogsPage, logger }, use) => {
-    await use(new AlertsWindowsSteps(browserWindowsPage, alertsPage, framesPage, modalDialogsPage, logger));
   }
 });
 

@@ -61,6 +61,8 @@ npm install
 npx playwright install chromium
 ```
 
+Для генерации Allure report проект использует локальную npm-зависимость `allure-commandline`. Для запуска Allure CLI на машине должен быть установлен Java.
+
 ## Запуск из консоли
 
 UI:
@@ -85,6 +87,12 @@ npm run test:all -- --brand=demoqa --workers=4 --tags="(@ui or @api) and not @wi
 
 ```bash
 npm run test:tags -- --brand=demoqa --workers=2 --tags="@regression and not @wip"
+```
+
+Новые UI сценарии для `alertsWindows`:
+
+```bash
+npm run test:ui -- --brand=demoqa --workers=4 --tags="@alertsWindows and @ui"
 ```
 
 ## Как работают параметры
@@ -174,6 +182,7 @@ accounts: [
 - Tag filtering: `src/shared/tag-utils/tag-expression.ts`, `src/shared/tag-utils/tagged-test.ts`
 - Soft assert: `src/shared/soft-assert/soft-assert.ts`
 - Steps-like layer: `src/ui/steps/home.steps.ts`, `src/api/steps/book-store.steps.ts`
+- Feature-like UI steps для alerts/windows: `src/ui/steps/browser-windows.steps.ts`, `src/ui/steps/alerts.steps.ts`, `src/ui/steps/frames.steps.ts`, `src/ui/steps/modal-dialogs.steps.ts`, `src/ui/steps/css-verification.steps.ts`
 - Stream API equivalents: `tests/api/bookstore.spec.ts`
 - Logging: `src/shared/logger/logger.ts`
 - Page objects / component objects: `src/ui/pages/*`, `src/ui/components/*`
@@ -185,6 +194,43 @@ accounts: [
 - `HomePage`, `SectionPage`, `PracticeFormPage` инкапсулируют действия и элементы.
 - `CategoryCardComponent`, `HeaderComponent`, `SideMenuComponent` отвечают за отдельные UI блоки.
 - `HomeSteps` делает сценарии читаемыми как последовательность бизнес-шагов.
+- Для `alertsWindows` добавлены отдельные step classes по страницам, чтобы tests читались как сценарии Given / When / Then, а повторяющиеся действия и CSS-проверки не дублировались.
+
+## Allure Report
+
+После запуска тестов результаты сохраняются в `allure-results`.
+
+Очистить старые результаты:
+
+```bash
+npm run allure:clean
+```
+
+Сгенерировать отчёт:
+
+```bash
+npm run allure:generate
+```
+
+Открыть отчёт в браузере:
+
+```bash
+npm run allure:open
+```
+
+Типовая последовательность:
+
+```bash
+npm run test:ui -- --brand=demoqa --workers=4 --tags="@alertsWindows and @ui"
+npm run allure:generate
+npm run allure:open
+```
+
+Проверить Java:
+
+```bash
+java -version
+```
 
 ## API слой
 
@@ -215,6 +261,7 @@ npx playwright install chromium
 npm run typecheck
 npm run test:ui -- --brand=demoqa --workers=4 --tags="@ui"
 npm run test:api -- --brand=demoqa --workers=4 --tags="@api"
+npm run allure:generate
 ```
 
 Именно эти команды я запускаю после генерации проекта, чтобы убедиться, что framework стартует и тесты проходят.
